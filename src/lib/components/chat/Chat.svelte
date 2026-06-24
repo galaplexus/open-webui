@@ -139,6 +139,7 @@
 	let eventConfirmationInputPlaceholder = '';
 	let eventConfirmationInputValue = '';
 	let eventConfirmationInputType = '';
+	let eventConfirmationInputOptions: ({ label?: string; value: string } | string)[] = [];
 	let eventCallback = null;
 
 	let selectedModels = [''];
@@ -646,14 +647,16 @@
 				} else if (type === 'input') {
 					eventCallback = cb;
 
-					eventConfirmationInput = true;
-					showEventConfirmation = true;
-
 					eventConfirmationTitle = data.title;
 					eventConfirmationMessage = data.message;
 					eventConfirmationInputPlaceholder = data.placeholder;
 					eventConfirmationInputValue = data?.value ?? '';
 					eventConfirmationInputType = data?.type ?? '';
+					eventConfirmationInputOptions = data?.options ?? [];
+					console.log('[Chat] input event — data:', data);
+					console.log('[Chat] input event — type:', eventConfirmationInputType, '| options:', eventConfirmationInputOptions);
+					eventConfirmationInput = true;
+					showEventConfirmation = true;
 				} else if (type.startsWith('terminal:')) {
 					terminalEventHandler(type, data);
 				} else {
@@ -2987,6 +2990,7 @@
 	inputPlaceholder={eventConfirmationInputPlaceholder}
 	inputValue={eventConfirmationInputValue}
 	inputType={eventConfirmationInputType}
+	inputOptions={eventConfirmationInputOptions}
 	on:confirm={(e) => {
 		if (e.detail) {
 			eventCallback(e.detail);
