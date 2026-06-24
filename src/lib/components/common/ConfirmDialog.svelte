@@ -24,6 +24,7 @@
 	export let inputPlaceholder = '';
 	export let inputValue = '';
 	export let inputType = '';
+	export let inputOptions: ({ label?: string; value: string } | string)[] = [];
 
 	let _inputValue = inputValue;
 
@@ -147,6 +148,23 @@
 										required={true}
 									/>
 								</div>
+							{:else if inputType === 'select' && inputOptions.length}
+								<select
+									class="w-full mt-2 rounded-lg px-4 py-2 text-sm dark:text-gray-300 dark:bg-gray-900 outline-hidden"
+									bind:value={_inputValue}
+									required
+								>
+									<option value="" disabled
+										>{inputPlaceholder ? inputPlaceholder : $i18n.t('Select an option')}</option
+									>
+									{#each inputOptions as option}
+										{#if typeof option === 'object' && option !== null}
+											<option value={option.value}>{option.label ?? option.value}</option>
+										{:else}
+											<option value={option}>{option}</option>
+										{/if}
+									{/each}
+								</select>
 							{:else}
 								<textarea
 									bind:value={_inputValue}
